@@ -1,0 +1,8 @@
+name: osquery
+title: Osqueryd baseline - InSpec Profile
+maintainer: juju4
+copyright: juju4
+copyright_email: juju4@users.noreply.github.com
+license: All Rights Reserved
+summary: An InSpec Compliance Profile for osqueryd
+version: 0.1.0
