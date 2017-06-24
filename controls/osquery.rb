@@ -14,9 +14,8 @@ else
   osquery_usrdir = '/usr/bin'
 end
 
-
-control 'osquery-1.0' do                        # A unique ID for this control
-  impact 0.7                                # The criticality, if this control fails.
+control 'osquery-1.0' do # A unique ID for this control
+  impact 0.7 # The criticality, if this control fails.
   title 'Osquery should be present'
   desc 'Ensure Osqueryi and osqueryd executables and configuration are present'
   describe file(osquery_confdir) do
@@ -64,8 +63,8 @@ control 'osquery-3.0' do
     it { should be_file }
     it { should be_owned_by 'root' }
     its('mode') { should cmp '0640' }
-#    its('content') { should match '{"name":"pack_osquery-custom-pack_process_binding_to_ports","hostIdentifier":' }
-#    its('content') { should match 'hostIdentifier' }
+    # its('content') { should match '{"name":"pack_osquery-custom-pack_process_binding_to_ports","hostIdentifier":' }
+    # its('content') { should match 'hostIdentifier' }
   end
   describe file('/var/log/osquery/osqueryd.INFO') do
     it { should be_file }
@@ -83,11 +82,10 @@ control 'osquery-4.0' do
   desc 'Ensure osqueryd logs file were updated less than 900s in the past'
   describe file('/var/log/osquery/osqueryd.results.log').mtime.to_i do
     it { should <= Time.now.to_i }
-    it { should >= Time.now.to_i - 900}
+    it { should >= Time.now.to_i - 900 }
   end
   describe file('/var/log/osquery/osqueryd.INFO').mtime.to_i do
     it { should <= Time.now.to_i }
-    it { should >= Time.now.to_i - 900}
+    it { should >= Time.now.to_i - 900 }
   end
 end
-
