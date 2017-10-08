@@ -4,6 +4,9 @@
 
 title 'Osquery section'
 
+osquery_std_logs = attribute('osquery_std_logs', default: true, description: 'Check osquery use default file logging')
+osquery_syslog_logs = attribute('osquery_syslog_logs', default: false, description: 'Check osquery use syslog logging')
+
 if os.darwin?
   osquery_confdir = '/var/osquery'
   osquery_vardir = '/var/osquery'
@@ -55,37 +58,59 @@ control 'osquery-2.0' do
   end
 end
 
-control 'osquery-3.0' do
-  impact 0.7
-  title 'Osqueryd should have log files'
-  desc 'Ensure osqueryd logs file are present'
-  describe file('/var/log/osquery/osqueryd.results.log') do
-    it { should be_file }
-    it { should be_owned_by 'root' }
-    its('mode') { should cmp '0640' }
-    # its('content') { should match '{"name":"pack_osquery-custom-pack_process_binding_to_ports","hostIdentifier":' }
-    # its('content') { should match 'hostIdentifier' }
+if osquery_std_logs
+  control 'osquery-3.0' do
+    impact 0.7
+    title 'Osqueryd should have log files'
+    desc 'Ensure osqueryd file logs file are present'
+    describe file('/var/log/osquery/osqueryd.results.log') do
+      it { should be_file }
+      it { should be_owned_by 'root' }
+      its('mode') { should cmp '0640' }
+      # its('content') { should match '{"name":"pack_osquery-custom-pack_process_binding_to_ports","hostIdentifier":' }
+      # its('content') { should match 'hostIdentifier' }
+    end
+    describe file('/var/log/osquery/osqueryd.INFO') do
+      it { should be_file }
+      it { should be_owned_by 'root' }
+      its('mode') { should cmp '0644' }
+      its('content') { should match 'Log file created at:' }
+      its('content') { should match 'Running on machine: ' }
+      its('content') { should match 'Log line format: ' }
+    end
   end
-  describe file('/var/log/osquery/osqueryd.INFO') do
-    it { should be_file }
-    it { should be_owned_by 'root' }
-    its('mode') { should cmp '0644' }
-    its('content') { should match 'Log file created at:' }
-    its('content') { should match 'Running on machine: ' }
-    its('content') { should match 'Log line format: ' }
+
+  control 'osquery-4.0' do
+    impact 0.7
+    title 'Osqueryd updated log files'
+    desc 'Ensure osqueryd logs file were updated less than 900s in the past'
+    describe file('/var/log/osquery/osqueryd.results.log').mtime.to_i do
+      it { should <= Time.now.to_i }
+      it { should >= Time.now.to_i - 900 }
+    end
+    describe file('/var/log/osquery/osqueryd.INFO').mtime.to_i do
+      it { should <= Time.now.to_i }
+      it { should >= Time.now.to_i - 900 }
+    end
   end
 end
 
-control 'osquery-4.0' do
-  impact 0.7
-  title 'Osqueryd updated log files'
-  desc 'Ensure osqueryd logs file were updated less than 900s in the past'
-  describe file('/var/log/osquery/osqueryd.results.log').mtime.to_i do
-    it { should <= Time.now.to_i }
-    it { should >= Time.now.to_i - 900 }
+if osquery_syslog_logs
+  if os.darwin?
+    syslog_file = '/var/log/system.log'
+  elsif os.redhat?
+    syslog_file = '/var/log/messages'
+  else
+    syslog_file = '/var/log/syslog'
   end
-  describe file('/var/log/osquery/osqueryd.INFO').mtime.to_i do
-    it { should <= Time.now.to_i }
-    it { should >= Time.now.to_i - 900 }
+  control 'osquery-5.0' do
+    impact 0.7
+    title 'Osqueryd should have log files (syslog)'
+    desc 'Ensure osqueryd syslog logs file are present'
+    describe file(#{syslog_file}) do
+      it { should be_file }
+      its('content') { should match 'osqueryd' }
+      its('content') { should match 'hostIdentifier' }
+    end
   end
 end
