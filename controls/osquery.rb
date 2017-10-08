@@ -11,10 +11,16 @@ if os.darwin?
   osquery_confdir = '/var/osquery'
   osquery_vardir = '/var/osquery'
   osquery_usrdir = '/usr/local/bin'
+  syslog_file = '/var/log/system.log'
 else
   osquery_confdir = '/etc/osquery'
   osquery_vardir = '/var/osquery'
   osquery_usrdir = '/usr/bin'
+  if os.redhat?
+    syslog_file = '/var/log/messages'
+  else
+    syslog_file = '/var/log/syslog'
+  end
 end
 
 control 'osquery-1.0' do # A unique ID for this control
@@ -96,13 +102,6 @@ if osquery_std_logs
 end
 
 if osquery_syslog_logs
-  if os.darwin?
-    syslog_file = '/var/log/system.log'
-  elsif os.redhat?
-    syslog_file = '/var/log/messages'
-  else
-    syslog_file = '/var/log/syslog'
-  end
   control 'osquery-5.0' do
     impact 0.7
     title 'Osqueryd should have log files (syslog)'
