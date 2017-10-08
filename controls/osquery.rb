@@ -16,11 +16,11 @@ else
   osquery_confdir = '/etc/osquery'
   osquery_vardir = '/var/osquery'
   osquery_usrdir = '/usr/bin'
-  if os.redhat?
-    syslog_file = '/var/log/messages'
-  else
-    syslog_file = '/var/log/syslog'
-  end
+  syslog_file = if os.redhat?
+                  '/var/log/messages'
+                else
+                  '/var/log/syslog'
+                end
 end
 
 control 'osquery-1.0' do # A unique ID for this control
