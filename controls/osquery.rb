@@ -107,7 +107,7 @@ if osquery_syslog_logs
     impact 0.7
     title 'Osqueryd should have log files (syslog)'
     desc 'Ensure osqueryd syslog logs file are present'
-    describe file(#{syslog_file}) do
+    describe file("#{syslog_file}") do
       it { should be_file }
       its('content') { should match 'osqueryd' }
       its('content') { should match 'hostIdentifier' }
