@@ -60,8 +60,8 @@ control 'osquery-2.0' do
   title 'Osqueryd should be running'
   desc 'Ensure osqueryd is running'
   describe processes('osqueryd') do
-    its('users') { should eq ['root'] }
-    its('list.length') { should eq 1 }
+    its('users') { should eq ['root', 'root' ] }
+    its('list.length') { should eq 2 }
   end
 end
 
