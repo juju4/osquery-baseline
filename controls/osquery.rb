@@ -59,6 +59,7 @@ control 'osquery-2.0' do
   impact 0.7
   title 'Osqueryd should be running'
   desc 'Ensure osqueryd is running'
+  only_if { !(virtualization.role == 'guest' && virtualization.system == 'docker') }
   describe processes('osqueryd') do
     its('users') { should eq %w[root root] }
     its('list.length') { should eq 2 }
