@@ -71,6 +71,7 @@ if osquery_std_logs
     impact 0.7
     title 'Osqueryd should have log files'
     desc 'Ensure osqueryd file logs file are present'
+    only_if { !(virtualization.role == 'guest' && virtualization.system == 'docker') }
     describe file('/var/log/osquery/osqueryd.results.log') do
       it { should be_file }
       it { should be_owned_by 'root' }
@@ -91,6 +92,7 @@ if osquery_std_logs
   control 'osquery-4.0' do
     impact 0.7
     title 'Osqueryd updated log files'
+    only_if { !(virtualization.role == 'guest' && virtualization.system == 'docker') }
     desc 'Ensure osqueryd logs file were updated less than 900s in the past'
     describe file('/var/log/osquery/osqueryd.results.log').mtime.to_i do
       it { should <= Time.now.to_i }
@@ -108,6 +110,7 @@ if osquery_syslog_logs
     impact 0.7
     title 'Osqueryd should have log files (syslog)'
     desc 'Ensure osqueryd syslog logs file are present'
+    only_if { !(virtualization.role == 'guest' && virtualization.system == 'docker') }
     describe file(syslog_file.to_s) do
       it { should be_file }
       its('content') { should match 'osqueryd' }
