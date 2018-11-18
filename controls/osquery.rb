@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 # copyright: 2015, The Authors
 # license: All rights reserved
