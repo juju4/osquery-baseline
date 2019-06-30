@@ -30,7 +30,7 @@ control 'osquerywin-1.0' do # A unique ID for this control
   describe file("#{osquery_confdir}/osqueryd/osqueryd.exe") do
     it { should be_file }
   end
-  describe command("\"#{osquery_confdir}\osqueryi.exe\" --config_path \"#{osquery_confdir}\osquery.conf\" --config_check --verbose") do
+  describe command("\"#{osquery_confdir}\\osqueryi.exe\" --config_path \"#{osquery_confdir}\\osquery.conf\" --config_check --verbose") do
     its('stdout') { should_not match 'Error' }
     its('stderr') { should_not match 'Error' }
   end
@@ -56,12 +56,12 @@ if osquery_std_logs
     title 'Osqueryd should have log files'
     desc 'Ensure osqueryd file logs file are present'
     only_if { os.family == 'windows' }
-    describe file("#{osquery_logdir}\osqueryd.results.log") do
+    describe file("#{osquery_logdir}\\osqueryd.results.log") do
       it { should be_file }
       # its('content') { should match '{"name":"pack_osquery-custom-pack_process_binding_to_ports","hostIdentifier":' }
       # its('content') { should match 'hostIdentifier' }
     end
-    describe file("#{osquery_logdir}\osqueryd.INFO") do
+    describe file("#{osquery_logdir}\\osqueryd.INFO") do
       it { should be_file }
       its('content') { should match 'Log file created at:' }
       its('content') { should match 'Running on machine: ' }
@@ -74,11 +74,11 @@ if osquery_std_logs
     title 'Osqueryd updated log files'
     only_if { os.family == 'windows' }
     desc 'Ensure osqueryd logs file were updated less than 900s in the past'
-    describe file("#{osquery_logdir}\osqueryd.results.log").mtime.to_i do
+    describe file("#{osquery_logdir}\\osqueryd.results.log").mtime.to_i do
       it { should <= Time.now.to_i }
       it { should >= Time.now.to_i - 900 }
     end
-    describe file("#{osquery_logdir}\osqueryd.INFO").mtime.to_i do
+    describe file("#{osquery_logdir}\\osqueryd.INFO").mtime.to_i do
       it { should <= Time.now.to_i }
       it { should >= Time.now.to_i - 900 }
     end
