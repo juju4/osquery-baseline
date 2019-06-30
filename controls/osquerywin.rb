@@ -5,10 +5,19 @@
 
 title 'Osquery Windows section'
 
-osquery_confdir = attribute('osquery_dir', default: 'C:\Program Files\osquery', description: 'osquery program directory')
-osquery_vardir = attribute('osquery_dir', default: 'C:\ProgramData\osquery', description: 'osquery.db directory')
-osquery_std_logs = attribute('osquery_std_logs', default: true, description: 'Check osquery use default file logging')
-osquery_logdir = attribute('osquery_logdir', default: 'C:\Program Files\osquery\log', description: 'osquery log directory')
+inputs:
+  - name: osquery_confdir
+    description: 'osquery program directory'
+    value: 'C:\Program Files\osquery'
+  - name: osquery_vardir
+    description: 'osquery.db directory'
+    value: 'C:\ProgramData\osquery'
+  - name: osquery_std_logs
+    description: 'Check osquery use default file logging'
+    value: true
+  - name: osquery_logdir
+    description: 'osquery log directory'
+    value: 'C:\Program Files\osquery\log'
 
 control 'osquerywin-1.0' do # A unique ID for this control
   impact 0.7 # The criticality, if this control fails.
