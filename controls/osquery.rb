@@ -28,6 +28,7 @@ control 'osquery-1.0' do # A unique ID for this control
   impact 0.7 # The criticality, if this control fails.
   title 'Osquery should be present'
   desc 'Ensure Osqueryi and osqueryd executables and configuration are present'
+  only_if { os.family != 'windows' }
   describe file(osquery_confdir) do
     it { should be_directory }
   end
@@ -59,7 +60,7 @@ control 'osquery-2.0' do
   impact 0.7
   title 'Osqueryd should be running'
   desc 'Ensure osqueryd is running'
-  only_if { !(virtualization.role == 'guest' && virtualization.system == 'docker') }
+  only_if { !(virtualization.role == 'guest' && virtualization.system == 'docker') && os.family != 'windows' }
   describe processes('osqueryd') do
     its('users') { should eq %w[root root] }
     its('list.length') { should eq 2 }
@@ -71,7 +72,7 @@ if osquery_std_logs
     impact 0.7
     title 'Osqueryd should have log files'
     desc 'Ensure osqueryd file logs file are present'
-    only_if { !(virtualization.role == 'guest' && virtualization.system == 'docker') }
+    only_if { !(virtualization.role == 'guest' && virtualization.system == 'docker') && os.family != 'windows' }
     describe file('/var/log/osquery/osqueryd.results.log') do
       it { should be_file }
       it { should be_owned_by 'root' }
@@ -92,7 +93,7 @@ if osquery_std_logs
   control 'osquery-4.0' do
     impact 0.7
     title 'Osqueryd updated log files'
-    only_if { !(virtualization.role == 'guest' && virtualization.system == 'docker') }
+    only_if { !(virtualization.role == 'guest' && virtualization.system == 'docker') && os.family != 'windows' }
     desc 'Ensure osqueryd logs file were updated less than 900s in the past'
     describe file('/var/log/osquery/osqueryd.results.log').mtime.to_i do
       it { should <= Time.now.to_i }
@@ -110,7 +111,7 @@ if osquery_syslog_logs
     impact 0.7
     title 'Osqueryd should have log files (syslog)'
     desc 'Ensure osqueryd syslog logs file are present'
-    only_if { !(virtualization.role == 'guest' && virtualization.system == 'docker') }
+    only_if { !(virtualization.role == 'guest' && virtualization.system == 'docker') && os.family != 'windows' }
     describe file(syslog_file.to_s) do
       it { should be_file }
       its('content') { should match 'osqueryd' }
