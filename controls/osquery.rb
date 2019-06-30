@@ -63,7 +63,7 @@ control 'osquery-2.0' do
   only_if { !(virtualization.role == 'guest' && virtualization.system == 'docker') && os.family != 'windows' }
   describe processes('osqueryd') do
     its('users') { should eq %w[root root] }
-    its('list.length') { should eq 2 }
+    its('entries.length') { should eq 2 }
   end
 end
 
