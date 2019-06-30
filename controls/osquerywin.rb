@@ -53,7 +53,7 @@ control 'osquerywin-2.0' do
   describe processes('osqueryd') do
     its('entries.length') { should eq 2 }
   end
-  describe service('osqueryd') do
+  describe service('osquery daemon') do
     it { should be_installed }
     it { should be_running }
   end
