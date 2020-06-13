@@ -6,7 +6,7 @@
 title 'Osquery Windows section'
 
 osquery_confdir = attribute('osquery_dir', default: 'C:\Program Files\osquery', description: 'osquery program directory')
-osquery_vardir = attribute('osquery_dir', default: 'C:\ProgramData\osquery', description: 'osquery.db directory')
+osquery_vardir = attribute('osquery_dir', default: 'C:\Program Files\osquery', description: 'osquery.db directory')
 osquery_std_logs = attribute('osquery_std_logs', default: true, description: 'Check osquery use default file logging')
 osquery_logdir = attribute('osquery_logdir', default: 'C:\Program Files\osquery\log', description: 'osquery log directory')
 
@@ -31,8 +31,9 @@ control 'osquerywin-1.0' do # A unique ID for this control
     it { should be_file }
   end
   describe command("\"#{osquery_confdir}\\osqueryi.exe\" --config_path \"#{osquery_confdir}\\osquery.conf\" --config_check --verbose") do
-    its('stdout') { should_not match 'Error' }
-    its('stderr') { should_not match 'Error' }
+    its('stdout') { should match 'osquery initialized' }
+    its('stdout') { should_not match 'Error reading config' }
+    its('stderr') { should match '^$' }
   end
 end
 
