@@ -5,8 +5,8 @@
 
 title 'Osquery section'
 
-osquery_std_logs = attribute('osquery_std_logs', default: true, description: 'Check osquery use default file logging')
-osquery_syslog_logs = attribute('osquery_syslog_logs', default: false, description: 'Check osquery use syslog logging')
+osquery_std_logs = input('osquery_std_logs', value: true, description: 'Check osquery use default file logging')
+osquery_syslog_logs = input('osquery_syslog_logs', value: false, description: 'Check osquery use syslog logging')
 
 if os.darwin?
   osquery_confdir = '/var/osquery'
