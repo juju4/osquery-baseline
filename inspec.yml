@@ -1,4 +1,4 @@
-name: osquery
+name: osquery-baseline
 title: Osqueryd baseline - InSpec Profile
 maintainer: juju4
 copyright: juju4
