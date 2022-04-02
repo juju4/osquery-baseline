@@ -32,8 +32,8 @@ namespace :test do
 end
 
 task :changelog do
-# Automatically generate a changelog for this project. Only loaded if
-# the necessary gem is installed. By default its picking up the version from
+  # Automatically generate a changelog for this project. Only loaded if
+  # the necessary gem is installed. By default its picking up the version from
   # inspec.yml. You can override that behavior with `rake changelog to=1.2.0`
 
   require 'yaml'
